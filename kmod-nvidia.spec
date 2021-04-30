@@ -183,10 +183,10 @@ rm nvidia-modeset.o
 %{postld} -r -m elf_%{_arch} -T %{kmod_share_dir}/module-common.lds --build-id -o %{kmod_module_path}/nvidia-drm.ko nvidia-drm/nvidia-drm.o nvidia-drm.mod.o
 
 
-depmod -a
+depmod -a -w %{kmod_kernel_version}.%{_arch}
 
 %postun
-depmod -a
+depmod -a -w %{kmod_kernel_version}.%{_arch}
 
 
 %install
