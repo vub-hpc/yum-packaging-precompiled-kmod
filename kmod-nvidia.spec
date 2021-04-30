@@ -140,23 +140,6 @@ for m in %{kmod_modules}; do
 		${m}.mod.o
 done
 
-# Sign modules.
-# We keep both the signed and unsigned version around so we can cut off the
-# signature from the signed part. Shipped will be only the signature file.
-SIGN_FILE=%{kmod_kernel_source}/scripts/sign-file
-for m in %{kmod_modules}; do
-	${SIGN_FILE} sha256 %{SOURCE1} %{SOURCE2} ${m}.ko ${m}.ko.signed
-
-	ko_size=`du -b "${m}.ko" | cut -f1`
-	tail ${m}.ko.signed -c +$(($ko_size + 1)) > ${m}.sig
-
-	# For reference this diff command should not find any difference between
-	# the two files
-        # cp ${m}.ko ${m}.test.ko
-        # cat ${m}.sig >> ${m}.test.ko
-        # diff ${m}.ko.signed ${m}.test.ko
-done
-
 # We don't want to require kernel-devel at installation time on the user system, so we
 # copy the module-common.lds of the kernel we're building against into the package.
 cp %{kmod_kernel_source}/scripts/module-common.lds .
@@ -200,13 +183,6 @@ rm nvidia-modeset.o
 %{postld} -r -m elf_%{_arch} -T %{kmod_share_dir}/module-common.lds --build-id -o %{kmod_module_path}/nvidia-drm.ko nvidia-drm/nvidia-drm.o nvidia-drm.mod.o
 
 
-
-# Sign all the linked .ko files by just appending the signature we've
-# extracted during the build
-for m in %{kmod_modules}; do
-	cat %{kmod_o_dir}/${m}.sig >> %{kmod_module_path}/${m}.ko
-done
-
 depmod -a
 
 %postun
@@ -230,24 +206,20 @@ mkdir -p %{buildroot}/%{_bindir}
 cd kernel
 # driver
 install nvidia.mod.o %{buildroot}/%{kmod_o_dir}/
-install nvidia.sig %{buildroot}/%{kmod_o_dir}/
 install nvidia/nv-interface.o %{buildroot}/%{kmod_o_dir}/nvidia/
 install nvidia/nv-kernel.o_binary %{buildroot}/%{kmod_o_dir}/nvidia/nv-kernel.o
 
 # uvm
 install nvidia-uvm.mod.o %{buildroot}/%{kmod_o_dir}/
-install nvidia-uvm.sig %{buildroot}/%{kmod_o_dir}/
 install nvidia-uvm.o %{buildroot}/%{kmod_o_dir}/nvidia-uvm/
 
 # modeset
 install nvidia-modeset.mod.o %{buildroot}/%{kmod_o_dir}/
-install nvidia-modeset.sig %{buildroot}/%{kmod_o_dir}/
 install nvidia-modeset/nv-modeset-interface.o %{buildroot}/%{kmod_o_dir}/nvidia-modeset/
 install nvidia-modeset/nv-modeset-kernel.o %{buildroot}/%{kmod_o_dir}/nvidia-modeset/
 
 # drm
 install nvidia-drm.mod.o %{buildroot}/%{kmod_o_dir}/
-install nvidia-drm.sig %{buildroot}/%{kmod_o_dir}/
 install nvidia-drm.o %{buildroot}/%{kmod_o_dir}/nvidia-drm/
 
 # misc
