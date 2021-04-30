@@ -76,6 +76,7 @@ Provides:		installonlypkg(kernel-module)
 Requires:		nvidia-driver-%{_named_version} = %{?epoch:%{epoch}:}%{kmod_driver_version}
 
 Conflicts:      kmod-nvidia-latest-dkms
+Provides:       kmod-nvidia-latest-dkms
 
 %if 0%{?rhel} >= 8 || 0%{?fedora}
 Supplements: (nvidia-driver-%{_named_version} and kernel >= %{kmod_kernel_version})
