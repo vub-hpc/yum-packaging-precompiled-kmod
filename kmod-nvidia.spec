@@ -87,7 +87,7 @@ Provides:		nvidia-kmod = %{?epoch:%{epoch}:}%{kmod_driver_version}
 Requires(post):		/usr/bin/strip
 
 Conflicts:      kmod-nvidia-latest-dkms
-Provides:       kmod-nvidia-latest-dkms
+Provides:       kmod-nvidia-latest-dkms = %{kmod_driver_version}-1%{kmod_dist}
 
 %if 0%{?rhel} >= 8 || 0%{?fedora}
 Supplements: (nvidia-driver = %{epoch}:%{kmod_driver_version} and kernel = %{kmod_kernel_version})
