@@ -60,9 +60,9 @@ Source3:    %{hsm_wrapper_script}
 %endif
 
 
-Name:		kmod-%{kmod_vendor}-%{kmod_driver_version}-%{kmod_kernel}-%{kmod_kernel_release}
-Version:	%{kmod_driver_version}
-Release:	3%{kmod_dist}
+Name:		kmod-%{kmod_vendor}-%{_named_version}
+Version:	%{kmod_kernel}
+Release:	%{kmod_kernel_release}.r%{kmod_driver_version}%{kmod_dist}
 Summary:	NVIDIA graphics driver
 Group:		System/Kernel
 License:	Nvidia
