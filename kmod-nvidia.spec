@@ -202,7 +202,7 @@ for m in %{kmod_modules}; do
 	ko_size=`du -b "${m}.ko" | cut -f1`
 	tail ${m}.ko-signature -c +$(($ko_size + 1)) > ${m}.sig
 done
-
+%endif
 
 %post
 unset LD_RUN_PATH
@@ -282,7 +282,6 @@ install nvidia-drm.o %{buildroot}/%{kmod_o_dir}/nvidia-drm/
 
 # peermem
 install nvidia-peermem.mod.o %{buildroot}/%{kmod_o_dir}/
-install nvidia-peermem.sig %{buildroot}/%{kmod_o_dir}/
 install nvidia-peermem.o %{buildroot}/%{kmod_o_dir}/nvidia-peermem/
 
 # misc
