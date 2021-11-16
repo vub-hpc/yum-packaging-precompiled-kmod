@@ -308,6 +308,11 @@ install -m 755 ld.gold %{buildroot}/%{postld}
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Nov 16 2021 Alex Domingo <alex.domingo.toro@vub.be>
+ - Fix conflict resolution with kmod-nvidia-latest-dkms
+ - Disable module signing
+ - Roll back RPM navimg scheme to static names
+
 * Wed Jul 07 2021 Kevin Mittman <kmittman@nvidia.com>
  - Add two-pass HSM certificate signing flow
 
